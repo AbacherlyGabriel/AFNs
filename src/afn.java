@@ -10,7 +10,7 @@ public class afn {
         if (args.length == 2) {
             ExecutaAFNs afn = new ExecutaAFNs(args[0], args[1]);
 
-            afn.estruturaAFN();
+            afn.executaAFNs();
             afn.resultados("Testando Arquivo de Saida");
         }
         else {

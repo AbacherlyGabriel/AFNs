@@ -8,8 +8,8 @@ Classe responsável pela estruturação e execução de Autômatos Finitos Não 
 
 public class ExecutaAFNs {
 
-    String arqTeste = null;
-    String arqSaida = null;
+    private String arqTeste = null;
+    private String arqSaida = null;
 
     public ExecutaAFNs(String arqTeste, String arqSaida) {
         this.arqTeste = arqTeste.concat(".txt");
@@ -121,7 +121,7 @@ public class ExecutaAFNs {
     Estruturando o autômato
      */
 
-    public void estruturaAFN() {
+    public void executaAFNs() {
         try {
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
@@ -143,7 +143,19 @@ public class ExecutaAFNs {
                 System.out.println("Transicoes: " +transicoes);
                 System.out.println("Cadeias (Testes): " +cadeias);
 
+                // Lógica da execução
+                int qtdEstados = cabecalho.get(0);
+
+                Automato afn = new Automato(qtdEstados);
+
+                afn.addEstado(0, 1, 0);
+                afn.addEstado(0, 1, 1);
+                afn.addEstado(0, 2, 1);
+
+                afn.printAutomato();
+
                 numAFNs--;
+                break;
             }
 
             arqLeitura.close();
