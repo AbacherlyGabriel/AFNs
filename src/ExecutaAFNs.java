@@ -118,10 +118,29 @@ public class ExecutaAFNs {
     }
 
     /*
+    Exibindo autômato
+     */
+
+    public void printAutomato(List<List<Estado>> afn) {
+        System.out.println("\nEstrutura:");
+
+        for (int i = 0; i < afn.size(); i++) {
+            System.out.print(i + " -> [");
+
+            for (int j = 0; j < afn.get(i).size(); j++) {
+                System.out.print("(" + afn.get(i).get(j).getSimbolo() + " " + afn.get(i).get(j).getDestino() + ")");
+            }
+            System.out.print("]");
+            System.out.println();
+        }
+    }
+
+
+    /*
     Estruturando o autômato
      */
 
-    public void executaAFNs() {
+    public void estruturaAFNs() {
         try {
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
@@ -129,6 +148,7 @@ public class ExecutaAFNs {
             int numAFNs = numTestes(leitorArq);
 
             while (numAFNs > 0) {
+                // Leitura do arquivo
                 List<Integer> cabecalho = infosAFN(leitorArq);
                 List<Integer> estadosDeAceitacao = infosAFN(leitorArq);
 
@@ -144,18 +164,27 @@ public class ExecutaAFNs {
                 System.out.println("Cadeias (Testes): " +cadeias);
 
                 // Lógica da execução
+                List<List<Estado>> afn = new ArrayList<>();
+
                 int qtdEstados = cabecalho.get(0);
 
-                Automato afn = new Automato(qtdEstados);
+                for (int i = 0; i < qtdEstados; i++) {
+                    List<Estado> estados = new ArrayList<>();
+                    afn.add(i, estados);
+                }
 
-                afn.addEstado(0, 1, 0);
-                afn.addEstado(0, 1, 1);
-                afn.addEstado(0, 2, 1);
+                for (List<Integer> transicao : transicoes) {
+                    int origem = transicao.get(0);
+                    int simbolo = transicao.get(1);
+                    int destino = transicao.get(2);
 
-                afn.printAutomato();
+                    Estado estado = new Estado(simbolo, destino);
+                    afn.get(origem).add(estado);
+                }
+
+                printAutomato(afn);
 
                 numAFNs--;
-                break;
             }
 
             arqLeitura.close();
