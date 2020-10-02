@@ -135,12 +135,28 @@ public class ExecutaAFNs {
         }
     }
 
+    /*
+    Método responsável pela leitura das cadeias de teste
+     */
+
+    private void leitorDeCadeias(List<List<Estado>> afn, List<List<Integer>> cadeias) {
+        printAutomato(afn);
+
+        /*
+        for (List<Integer> cadeia : cadeias) {
+            for (int i = 0; i < cadeia.size(); i++) {
+                int simbolo = cadeia.get(i);
+            }
+        }
+         */
+    }
+
 
     /*
     Estruturando o autômato
      */
 
-    public void estruturaAFNs() {
+    public void executaAFNs() {
         try {
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
@@ -182,7 +198,7 @@ public class ExecutaAFNs {
                     afn.get(origem).add(estado);
                 }
 
-                printAutomato(afn);
+                leitorDeCadeias(afn, cadeias);
 
                 numAFNs--;
             }

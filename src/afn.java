@@ -1,4 +1,8 @@
 /*
+
+Gabriel Bispo Abacherly - 10284420
+
+
 Classe responsável pela execução do programa
 */
 
@@ -10,7 +14,7 @@ public class afn {
         if (args.length == 2) {
             ExecutaAFNs afn = new ExecutaAFNs(args[0], args[1]);
 
-            afn.estruturaAFNs();
+            afn.executaAFNs();
             afn.resultados("Testando Arquivo de Saida");
         }
         else {
