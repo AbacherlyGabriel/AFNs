@@ -136,21 +136,58 @@ public class ExecutaAFNs {
     }
 
     /*
+
+     */
+
+    private boolean recursao(List<List<Estado>> afn, List<Integer> cadeia, int indexEstado, int indexSimbolo) {
+        if ((indexSimbolo + 1) <= cadeia.size()) {
+            System.out.println("Simbolo a ser lido: " + cadeia.get(indexSimbolo));
+        }
+
+        if ((indexSimbolo + 1) > cadeia.size()) {
+            // Verificar se é estado de aceitacao
+            System.out.println("Retornou True: " +(indexSimbolo + 1)+ " eh maior que " +cadeia.size());
+            return true;
+        }
+        else {
+            int simbolo = cadeia.get(indexSimbolo);
+            //System.out.println("Simbolo a ser lido: " +simbolo);
+
+            List<Estado> estado = afn.get(indexEstado);
+
+            for (int i = 0; i < estado.size(); i++) {
+                System.out.println("Estado: " +i);
+
+                if (estado.get(i).getSimbolo() == simbolo) {
+                    System.out.println("Transicao: " +estado.get(i).getSimbolo()+ " -> " +estado.get(i).getDestino());
+
+                    //cadeia.remove(0);
+
+                    System.out.println("\n[!] Realizando chamada recursiva...\n");
+                    boolean resultado = recursao(afn, cadeia, i, indexSimbolo + 1);
+                    System.out.println("Resultado: " +resultado);
+                    return resultado;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /*
     Método responsável pela leitura das cadeias de teste
      */
 
     private void leitorDeCadeias(List<List<Estado>> afn, List<List<Integer>> cadeias) {
         printAutomato(afn);
 
-        /*
         for (List<Integer> cadeia : cadeias) {
-            for (int i = 0; i < cadeia.size(); i++) {
-                int simbolo = cadeia.get(i);
-            }
+            System.out.println("\nIniciando Execucao...");
+            System.out.println("Cadeia: " +cadeia+ "\n");
+            recursao(afn, cadeia, 0, 0);
+            break;
         }
-         */
     }
-
 
     /*
     Estruturando o autômato
@@ -201,6 +238,7 @@ public class ExecutaAFNs {
                 leitorDeCadeias(afn, cadeias);
 
                 numAFNs--;
+                break;
             }
 
             arqLeitura.close();
