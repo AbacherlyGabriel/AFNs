@@ -171,7 +171,7 @@ public class ExecutaAFNs {
                 //cadeia.remove(0);
 
                 System.out.println("\n[!] Realizando chamada recursiva...\n");
-                if (recursao(cadeia, i, indexSimbolo + 1)) { System.out.println("TRUE"); break; }
+                if (recursao(cadeia, i, indexSimbolo + 1)) { System.out.println("TRUE"); return true; }
             }
         }
 
