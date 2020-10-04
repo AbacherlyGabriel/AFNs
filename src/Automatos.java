@@ -213,7 +213,7 @@ public class Automatos {
 
     public void executaAFNs() {
         try {
-            FileWriter arqEscrita = new FileWriter(this.arqSaida);
+
 
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
@@ -258,7 +258,7 @@ public class Automatos {
                 this.afn = afn;
 
                 List<Integer> resultadosLeitura = leitorDeCadeias(cadeias);
-                resultados(arqEscrita, resultadosLeitura);
+                resultados(resultadosLeitura, numAFNs);
 
                 numAFNs--;
             }
@@ -274,15 +274,22 @@ public class Automatos {
     Método responsável por adicionar os resultados dos testes ao arquivo de saída
      */
 
-    public void resultados(FileWriter arqEscrita, List<Integer> resultadosLeitura) {
+    public void resultados(List<Integer> resultadosLeitura, int numAFNs) {
         try {
+            FileWriter arqEscrita = new FileWriter(this.arqSaida, true);
             PrintWriter escritorArq = new PrintWriter(arqEscrita);
 
             String resultadoLista = resultadosLeitura.toString().replace("[", "");
             String resultadoString = resultadoLista.replace("]", "");
             String resultado = resultadoString.replace(",", "");
 
-            escritorArq.println("teste");
+            if (numAFNs > 1) {
+                escritorArq.println(resultado);
+            }
+            else {
+                escritorArq.print(resultado);
+            }
+
             escritorArq.close();
 
             System.out.println("\nAdicionando " + "\"" + resultado + "\"" + " ao arquivo de saida...");
