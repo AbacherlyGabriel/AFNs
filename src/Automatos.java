@@ -6,7 +6,7 @@ import java.util.List;
 Classe responsável pela estruturação e execução de Autômatos Finitos Não Determinísticos
  */
 
-public class ExecutaAFNs {
+public class Automatos {
 
     private String arqTeste = null;
     private String arqSaida = null;
@@ -14,7 +14,7 @@ public class ExecutaAFNs {
     private List<List<Estado>> afn = null;
     private List<Integer> estadosDeAceitacao = null;
 
-    public ExecutaAFNs(String arqTeste, String arqSaida) {
+    public Automatos(String arqTeste, String arqSaida) {
         this.arqTeste = arqTeste.concat(".txt");
         this.arqSaida = arqSaida.concat(".txt");
     }
@@ -77,7 +77,7 @@ public class ExecutaAFNs {
     Método utilizado para fazer a leitura das transições e das cadeias de teste
      */
 
-    private List<List<Integer>> especsAFN(BufferedReader leitorArq, List<Integer> cabecalho, int qtd) {
+    private List<List<Integer>> especsAFN(BufferedReader leitorArq, int qtd) {
         try {
             List<List<Integer>> listaEspecs = new ArrayList<>();
 
@@ -153,25 +153,27 @@ public class ExecutaAFNs {
             for (int estadoDeAceitacao : this.estadosDeAceitacao) {
                 if (estadoDeAceitacao == indexEstado) { return true; }
             }
-
-            return false;
         }
 
-        int simbolo = cadeia.get(indexSimbolo);
-        //System.out.println("Simbolo a ser lido: " +simbolo);
+        else {
+            int simbolo = cadeia.get(indexSimbolo);
+            //System.out.println("Simbolo a ser lido: " +simbolo);
 
-        List<Estado> estado = this.afn.get(indexEstado);
+            List<Estado> estado = this.afn.get(indexEstado);
 
-        for (int i = 0; i < estado.size(); i++) {
-            System.out.println("Estado: " +i);
+            for (int i = 0; i < estado.size(); i++) {
+                System.out.println("Estado: " + indexEstado);
 
-            if (estado.get(i).getSimbolo() == simbolo) {
-                System.out.println("Transicao: " +estado.get(i).getSimbolo()+ " -> " +estado.get(i).getDestino());
+                if (estado.get(i).getSimbolo() == simbolo) {
+                    System.out.println("Transicao: " + estado.get(i).getSimbolo() + " -> " + estado.get(i).getDestino());
 
-                //cadeia.remove(0);
+                    //cadeia.remove(0);
 
-                System.out.println("\n[!] Realizando chamada recursiva...\n");
-                if (recursao(cadeia, i, indexSimbolo + 1)) { System.out.println("TRUE"); return true; }
+                    System.out.println("\n[!] Realizando chamada recursiva...\n");
+                    if (recursao(cadeia, estado.get(i).getDestino(), indexSimbolo + 1)) {
+                        return true;
+                    }
+                }
             }
         }
 
@@ -182,15 +184,27 @@ public class ExecutaAFNs {
     Método responsável pela leitura das cadeias de teste
      */
 
-    private void leitorDeCadeias(List<List<Integer>> cadeias) {
+    private List<Integer> leitorDeCadeias(List<List<Integer>> cadeias) {
         printAutomato(this.afn);
+        List<Integer> resultados = new ArrayList<>();
 
         for (List<Integer> cadeia : cadeias) {
             System.out.println("\nIniciando Execucao...");
             System.out.println("Cadeia: " +cadeia+ "\n");
-            recursao(cadeia, 0, 0);
-            break;
+            boolean resultado = recursao(cadeia, 0, 0);
+            resultados.add(resultado ? 1 : 0);
         }
+
+        /*
+        System.out.println("\nIniciando Execucao...");
+        System.out.println("Cadeia: " +cadeias.get(5)+ "\n");
+        boolean resultado = recursao(cadeias.get(5), 0, 0);
+        resultados.add(resultado ? 1 : 0);
+         */
+
+        System.out.println("\nResultados: " +resultados);
+
+        return resultados;
     }
 
     /*
@@ -199,6 +213,8 @@ public class ExecutaAFNs {
 
     public void executaAFNs() {
         try {
+            FileWriter arqEscrita = new FileWriter(this.arqSaida);
+
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
 
@@ -210,10 +226,10 @@ public class ExecutaAFNs {
                 this.estadosDeAceitacao = infosAFN(leitorArq);
 
                 int numTransacoes = qtdTransicoes(cabecalho);
-                List<List<Integer>> transicoes = especsAFN(leitorArq, cabecalho, numTransacoes);
+                List<List<Integer>> transicoes = especsAFN(leitorArq, numTransacoes);
 
                 int numCadeias = qtdTestes(leitorArq);
-                List<List<Integer>> cadeias = especsAFN(leitorArq, cabecalho, numCadeias);
+                List<List<Integer>> cadeias = especsAFN(leitorArq, numCadeias);
 
                 System.out.println("\nCabecalho: " +cabecalho);
                 System.out.println("Estados de Aceitacao (Index): " +estadosDeAceitacao);
@@ -241,10 +257,10 @@ public class ExecutaAFNs {
 
                 this.afn = afn;
 
-                leitorDeCadeias(cadeias);
+                List<Integer> resultadosLeitura = leitorDeCadeias(cadeias);
+                resultados(arqEscrita, resultadosLeitura);
 
                 numAFNs--;
-                break;
             }
 
             arqLeitura.close();
@@ -258,18 +274,21 @@ public class ExecutaAFNs {
     Método responsável por adicionar os resultados dos testes ao arquivo de saída
      */
 
-    public void resultados(String teste) {
+    public void resultados(FileWriter arqEscrita, List<Integer> resultadosLeitura) {
         try {
-            FileWriter arqEscrita = new FileWriter(this.arqSaida);
             PrintWriter escritorArq = new PrintWriter(arqEscrita);
 
-            escritorArq.println(teste);
+            String resultadoLista = resultadosLeitura.toString().replace("[", "");
+            String resultadoString = resultadoLista.replace("]", "");
+            String resultado = resultadoString.replace(",", "");
+
+            escritorArq.println("teste");
             escritorArq.close();
 
-            System.out.println("\nAdicionando " + "\"" + teste + "\"" + " ao arquivo de saida...");
+            System.out.println("\nAdicionando " + "\"" + resultado + "\"" + " ao arquivo de saida...");
         }
-        catch (IOException io) {
-            io.printStackTrace();
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
