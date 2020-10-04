@@ -11,6 +11,9 @@ public class ExecutaAFNs {
     private String arqTeste = null;
     private String arqSaida = null;
 
+    private List<List<Estado>> afn = null;
+    private List<Integer> estadosDeAceitacao = null;
+
     public ExecutaAFNs(String arqTeste, String arqSaida) {
         this.arqTeste = arqTeste.concat(".txt");
         this.arqSaida = arqSaida.concat(".txt");
@@ -139,35 +142,36 @@ public class ExecutaAFNs {
 
      */
 
-    private boolean recursao(List<List<Estado>> afn, List<Integer> cadeia, int indexEstado, int indexSimbolo) {
+    private boolean recursao(List<Integer> cadeia, int indexEstado, int indexSimbolo) {
         if ((indexSimbolo + 1) <= cadeia.size()) {
             System.out.println("Simbolo a ser lido: " + cadeia.get(indexSimbolo));
         }
 
         if ((indexSimbolo + 1) > cadeia.size()) {
-            // Verificar se é estado de aceitacao
-            System.out.println("Retornou True: " +(indexSimbolo + 1)+ " eh maior que " +cadeia.size());
-            return true;
+            System.out.println("Cadeia Finalizada...");
+
+            for (int estadoDeAceitacao : this.estadosDeAceitacao) {
+                if (estadoDeAceitacao == indexEstado) { return true; }
+            }
+
+            return false;
         }
-        else {
-            int simbolo = cadeia.get(indexSimbolo);
-            //System.out.println("Simbolo a ser lido: " +simbolo);
 
-            List<Estado> estado = afn.get(indexEstado);
+        int simbolo = cadeia.get(indexSimbolo);
+        //System.out.println("Simbolo a ser lido: " +simbolo);
 
-            for (int i = 0; i < estado.size(); i++) {
-                System.out.println("Estado: " +i);
+        List<Estado> estado = this.afn.get(indexEstado);
 
-                if (estado.get(i).getSimbolo() == simbolo) {
-                    System.out.println("Transicao: " +estado.get(i).getSimbolo()+ " -> " +estado.get(i).getDestino());
+        for (int i = 0; i < estado.size(); i++) {
+            System.out.println("Estado: " +i);
 
-                    //cadeia.remove(0);
+            if (estado.get(i).getSimbolo() == simbolo) {
+                System.out.println("Transicao: " +estado.get(i).getSimbolo()+ " -> " +estado.get(i).getDestino());
 
-                    System.out.println("\n[!] Realizando chamada recursiva...\n");
-                    boolean resultado = recursao(afn, cadeia, i, indexSimbolo + 1);
-                    System.out.println("Resultado: " +resultado);
-                    return resultado;
-                }
+                //cadeia.remove(0);
+
+                System.out.println("\n[!] Realizando chamada recursiva...\n");
+                if (recursao(cadeia, i, indexSimbolo + 1)) { System.out.println("TRUE"); break; }
             }
         }
 
@@ -178,13 +182,13 @@ public class ExecutaAFNs {
     Método responsável pela leitura das cadeias de teste
      */
 
-    private void leitorDeCadeias(List<List<Estado>> afn, List<List<Integer>> cadeias) {
-        printAutomato(afn);
+    private void leitorDeCadeias(List<List<Integer>> cadeias) {
+        printAutomato(this.afn);
 
         for (List<Integer> cadeia : cadeias) {
             System.out.println("\nIniciando Execucao...");
             System.out.println("Cadeia: " +cadeia+ "\n");
-            recursao(afn, cadeia, 0, 0);
+            recursao(cadeia, 0, 0);
             break;
         }
     }
@@ -203,7 +207,7 @@ public class ExecutaAFNs {
             while (numAFNs > 0) {
                 // Leitura do arquivo
                 List<Integer> cabecalho = infosAFN(leitorArq);
-                List<Integer> estadosDeAceitacao = infosAFN(leitorArq);
+                this.estadosDeAceitacao = infosAFN(leitorArq);
 
                 int numTransacoes = qtdTransicoes(cabecalho);
                 List<List<Integer>> transicoes = especsAFN(leitorArq, cabecalho, numTransacoes);
@@ -235,7 +239,9 @@ public class ExecutaAFNs {
                     afn.get(origem).add(estado);
                 }
 
-                leitorDeCadeias(afn, cadeias);
+                this.afn = afn;
+
+                leitorDeCadeias(cadeias);
 
                 numAFNs--;
                 break;
