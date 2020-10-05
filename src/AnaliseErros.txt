@@ -24,8 +24,7 @@ Cadeia: [1]
 
 Simbolo a ser lido: 1
 Estado: 0
-Estado: 0
-Transicao: 1 -> 2
+Transicao: 0 -> 1
 
 [!] Realizando chamada recursiva...
 
@@ -36,6 +35,12 @@ Cadeia: [1, 2, 2, 2, 2, 2, 1]
 
 Simbolo a ser lido: 1
 Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 1
 Estado: 0
 Transicao: 1 -> 2
 
@@ -85,8 +90,32 @@ Cadeia: [1, 1, 1, 2, 1, 1, 1]
 
 Simbolo a ser lido: 1
 Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 1
+Estado: 1
+Transicao: 1 -> 0
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 1
+Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 1
 Estado: 0
 Transicao: 1 -> 2
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 2
+Transicao: 2 -> 2
 
 [!] Realizando chamada recursiva...
 
@@ -103,16 +132,25 @@ Transicao: 1 -> 0
 
 [!] Realizando chamada recursiva...
 
-Simbolo a ser lido: 2
+Simbolo a ser lido: 1
 Estado: 0
-Estado: 0
-Estado: 2
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Cadeia Finalizada...
 
 Iniciando Execucao...
 Cadeia: [1, 2, 1, 1]
 
 Simbolo a ser lido: 1
 Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 1
 Estado: 0
 Transicao: 1 -> 2
 
@@ -153,8 +191,7 @@ Transicao: 1 -> 0
 
 Simbolo a ser lido: 1
 Estado: 0
-Estado: 0
-Transicao: 1 -> 2
+Transicao: 0 -> 1
 
 [!] Realizando chamada recursiva...
 
@@ -165,6 +202,12 @@ Cadeia: [1, 2, 2, 1, 2, 2]
 
 Simbolo a ser lido: 1
 Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 1
 Estado: 0
 Transicao: 1 -> 2
 
@@ -206,6 +249,12 @@ Transicao: 1 -> 0
 
 Simbolo a ser lido: 2
 Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 1
 Estado: 0
 Estado: 2
 Estado: 2
@@ -221,12 +270,35 @@ Cadeia: [2]
 
 Simbolo a ser lido: 2
 Estado: 0
-Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Cadeia Finalizada...
 
 Iniciando Execucao...
 Cadeia: [1, 1, 2, 2, 1, 2]
 
 Simbolo a ser lido: 1
+Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 1
+Estado: 1
+Transicao: 1 -> 0
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 0
+Transicao: 0 -> 1
+
+[!] Realizando chamada recursiva...
+
+Simbolo a ser lido: 2
+Estado: 1
 Estado: 0
 Estado: 0
 Transicao: 1 -> 2
@@ -244,6 +316,6 @@ Simbolo a ser lido: 2
 Estado: 1
 Estado: 2
 
-Resultados: [1, 0, 1, 0, 0, 0, 0, 0]
+Resultados: [1, 1, 1, 1, 1, 0, 1, 0]
 
-Adicionando "1 0 1 0 0 0 0 0" ao arquivo de saida...
+Adicionando "1 1 1 1 1 0 1 0" ao arquivo de saida...

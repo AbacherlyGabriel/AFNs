@@ -164,7 +164,7 @@ public class Automatos {
             for (int i = 0; i < estado.size(); i++) {
                 System.out.println("Estado: " + indexEstado);
 
-                if (estado.get(i).getSimbolo() == simbolo) {
+                if ((estado.get(i).getSimbolo() == simbolo) || (estado.get(i).getSimbolo() == 0)) {
                     System.out.println("Transicao: " + estado.get(i).getSimbolo() + " -> " + estado.get(i).getDestino());
 
                     //cadeia.remove(0);
