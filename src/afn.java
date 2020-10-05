@@ -6,18 +6,18 @@ Gabriel Bispo Abacherly - 10284420
 Classe responsável pela execução do programa
 */
 
-import java.io.IOException;
-
 public class afn {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         if (args.length == 2) {
-            Automatos afn = new Automatos(args[0], args[1]);
 
+            // Instanciando objeto responsavel pela execucao do programa
+
+            Automatos afn = new Automatos(args[0], args[1]);
             afn.executaAFNs();
         }
         else {
-            System.out.println("[!] O nome dos arquivos devem ser, respectivamente, arqTeste e arqSaida");
+            System.out.println("[!] Deve-se passar dois argumentos de entrada (arquivos de teste e saida)");
         }
     }
 

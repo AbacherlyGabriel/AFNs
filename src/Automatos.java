@@ -8,11 +8,16 @@ Classe responsável pela estruturação e execução de Autômatos Finitos Não 
 
 public class Automatos {
 
-    private String arqTeste = null;
-    private String arqSaida = null;
+    private String arqTeste;                    // Arquivo contendo a especificacao dos AFNs
+    private String arqSaida;                    // Arquivo contendo a saida das leituras realizadas pelos automatos
 
-    private List<List<Estado>> afn = null;
-    private List<Integer> estadosDeAceitacao = null;
+    private List<List<Estado>> afn = null;                  // Estrutura responsavel por armazenar o automato
+    private List<Integer> estadosDeAceitacao = null;        // Lista contendo os estados de aceitacao
+
+    /*
+    Instanciando os objetos responsaveis por armazenar o nome dos
+    arquivos de entrada e saida
+     */
 
     public Automatos(String arqTeste, String arqSaida) {
         this.arqTeste = arqTeste.concat(".txt");
@@ -20,7 +25,7 @@ public class Automatos {
     }
 
     /*
-    Registrando o número de autômatos de testes contidos no arquivo de entrada
+    Registrando o numero de automatos de testes contidos no arquivo de entrada
      */
 
     private int numTestes(BufferedReader leitorArq) {
@@ -35,8 +40,8 @@ public class Automatos {
     }
 
     /*
-    Registrando as especificações do autômato em uma lista
-    Método utilizado para fazer a leitura do cabeçalho e dos índices dos estados de aceitação
+    Registrando as especificações do automato em uma lista
+    Metodo utilizado para fazer a leitura do cabeçalho e dos indices dos estados de aceitacao
      */
 
     private List<Integer> infosAFN(BufferedReader leitorArq) {
@@ -73,8 +78,8 @@ public class Automatos {
     }
 
     /*
-    Registrando as especificações do autômato em uma lista
-    Método utilizado para fazer a leitura das transições e das cadeias de teste
+    Registrando as especificacoes do automato em uma lista
+    Metodo utilizado para fazer a leitura das transicoes e das cadeias de teste
      */
 
     private List<List<Integer>> especsAFN(BufferedReader leitorArq, int qtd) {
@@ -106,7 +111,7 @@ public class Automatos {
     }
 
     /*
-    Método responsável por retornar a quantidade de cadeias que serão testadas no autômato
+    Metodo responsavel por retornar a quantidade de cadeias que serao testadas no automato
      */
 
     private int qtdTestes(BufferedReader leitorArq) {
@@ -121,7 +126,7 @@ public class Automatos {
     }
 
     /*
-    Exibindo autômato
+    Exibindo automato
      */
 
     public void printAutomato(List<List<Estado>> afn) {
@@ -139,7 +144,7 @@ public class Automatos {
     }
 
     /*
-
+    Leitura recursiva das cadeias de teste
      */
 
     private boolean recursao(List<Integer> cadeia, int indexEstado, int indexSimbolo) {
@@ -181,7 +186,7 @@ public class Automatos {
     }
 
     /*
-    Método responsável pela leitura das cadeias de teste
+    Metodo responsavel por gerenciar a leitura das cadeias de teste
      */
 
     private List<Integer> leitorDeCadeias(List<List<Integer>> cadeias) {
@@ -208,13 +213,11 @@ public class Automatos {
     }
 
     /*
-    Estruturando o autômato
+    Estruturando e gerenciando a execucao dos AFNs
      */
 
     public void executaAFNs() {
         try {
-
-
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
 
@@ -271,7 +274,7 @@ public class Automatos {
     }
 
     /*
-    Método responsável por adicionar os resultados dos testes ao arquivo de saída
+    Metodo responsavel por adicionar os resultados dos testes ao arquivo de saida
      */
 
     public void resultados(List<Integer> resultadosLeitura, int numAFNs) {
