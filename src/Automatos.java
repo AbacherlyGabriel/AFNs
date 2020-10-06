@@ -155,27 +155,43 @@ public class Automatos {
         if ((indexSimbolo + 1) > cadeia.size()) {
             System.out.println("Cadeia Finalizada...");
 
+            List<Estado> estado = this.afn.get(indexEstado);
+            List<Integer> estadosAlcancaveis = new ArrayList<>();
+
+            for (int i = 0; i < estado.size(); i++) {
+                if (estado.get(i).getSimbolo() == 0) {
+                    estadosAlcancaveis.add(estado.get(i).getDestino());
+                }
+            }
+
             for (int estadoDeAceitacao : this.estadosDeAceitacao) {
-                if (estadoDeAceitacao == indexEstado) { return true; }
+                if ((estadoDeAceitacao == indexEstado) || (estadosAlcancaveis.contains(estadoDeAceitacao))) { return true; }
             }
         }
 
         else {
-            int simbolo = cadeia.get(indexSimbolo);
-            //System.out.println("Simbolo a ser lido: " +simbolo);
-
             List<Estado> estado = this.afn.get(indexEstado);
+
+            int simbolo = cadeia.get(indexSimbolo);
 
             for (int i = 0; i < estado.size(); i++) {
                 System.out.println("Estado: " + indexEstado);
 
-                if ((estado.get(i).getSimbolo() == simbolo) || (estado.get(i).getSimbolo() == 0)) {
+                boolean transicaoSimbolo = estado.get(i).getSimbolo() == simbolo;
+                boolean transicaoCadeiaVazia = estado.get(i).getSimbolo() == 0;
+
+                if (transicaoSimbolo || transicaoCadeiaVazia) {
                     System.out.println("Transicao: " + estado.get(i).getSimbolo() + " -> " + estado.get(i).getDestino());
 
-                    //cadeia.remove(0);
+                    if ((transicaoCadeiaVazia) && (!transicaoSimbolo)) {
+                        indexSimbolo += 0;
+                    }
+                    else {
+                        indexSimbolo += 1;
+                    }
 
                     System.out.println("\n[!] Realizando chamada recursiva...\n");
-                    if (recursao(cadeia, estado.get(i).getDestino(), indexSimbolo + 1)) {
+                    if (recursao(cadeia, estado.get(i).getDestino(), indexSimbolo)) {
                         return true;
                     }
                 }
