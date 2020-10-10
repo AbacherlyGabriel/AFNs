@@ -1,7 +1,7 @@
 /*
 
 Gabriel Bispo Abacherly - 10284420
-
+Gregorio Assagra de Almedia Filho - 10856824
 
 Classe responsável pela execução do programa
 */

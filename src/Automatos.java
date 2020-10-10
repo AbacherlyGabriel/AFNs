@@ -63,7 +63,7 @@ public class Automatos {
     }
 
     /*
-    Método responsável por retornar a quantidade de transações presentes no autômato
+    Metodo responsavel por retornar a quantidade de transacoes presentes no automato
      */
 
     private int qtdTransicoes(List<Integer> cabecalho) {
@@ -79,7 +79,12 @@ public class Automatos {
 
     /*
     Registrando as especificacoes do automato em uma lista
-    Metodo utilizado para fazer a leitura das transicoes e das cadeias de teste
+
+    Metodo utilizado para fazer a leitura das transicoes e das cadeias de teste,
+    onde:
+
+    qtd = Numero de transicoes ou quantidade de cadeias de teste especificados no
+    arquivo de entrada
      */
 
     private List<List<Integer>> especsAFN(BufferedReader leitorArq, int qtd) {
@@ -145,18 +150,24 @@ public class Automatos {
 
     /*
     Leitura recursiva das cadeias de teste
+    Para as cadeias aceitas, retorna-se true
      */
 
     private boolean recursao(List<Integer> cadeia, int indexEstado, int indexSimbolo) {
+        List<Estado> estado = this.afn.get(indexEstado);                // Definindo estado que sera analisado
+
         if ((indexSimbolo + 1) <= cadeia.size()) {
             System.out.println("Simbolo a ser lido: " + cadeia.get(indexSimbolo));
         }
 
+        // Condicao de parada: cadeia finalizada
+
         if ((indexSimbolo + 1) > cadeia.size()) {
             System.out.println("Cadeia Finalizada...");
 
-            List<Estado> estado = this.afn.get(indexEstado);
-            List<Integer> estadosAlcancaveis = new ArrayList<>();
+            List<Integer> estadosAlcancaveis = new ArrayList<>();           // Instanciando lista de alcancaveis por cadeia vazia
+
+            // Preenchendo lista com estados alcancaveis por meio de cadeia vazia
 
             for (int i = 0; i < estado.size(); i++) {
                 if (estado.get(i).getSimbolo() == 0) {
@@ -164,31 +175,42 @@ public class Automatos {
                 }
             }
 
+            // Checando se o estado em analise ou algum dos alcancaveis esta entre os estados de aceitacao
+
             for (int estadoDeAceitacao : this.estadosDeAceitacao) {
                 if ((estadoDeAceitacao == indexEstado) || (estadosAlcancaveis.contains(estadoDeAceitacao))) { return true; }
             }
         }
 
         else {
-            List<Estado> estado = this.afn.get(indexEstado);
+            int simbolo = cadeia.get(indexSimbolo);                 // Armazenando simbolo a ser lido
 
-            int simbolo = cadeia.get(indexSimbolo);
+            // Buscando, em cada estado, transacoes que contenham o simbolo a ser lido ou cadeias vazias
 
             for (int i = 0; i < estado.size(); i++) {
                 System.out.println("Estado: " + indexEstado);
 
-                boolean transicaoSimbolo = estado.get(i).getSimbolo() == simbolo;
-                boolean transicaoCadeiaVazia = estado.get(i).getSimbolo() == 0;
+                boolean transicaoSimbolo = estado.get(i).getSimbolo() == simbolo;           // Validando se o simbolo foi encontrado
+                boolean transicaoCadeiaVazia = estado.get(i).getSimbolo() == 0;             // Validando se o estado em questao possui transicao de cadeia vazia
+                boolean aceitacaoCadeiaVazia = (indexEstado == 0) && (simbolo == 0);        // Validando se o estado inicial e um estado de aceitacao
 
-                if (transicaoSimbolo || transicaoCadeiaVazia) {
+                // Validando se alguma das expressoes acima e verdadeira
+                // Em caso positivo, uma chamada recursiva ao estado destino sera realizada
+
+                if (transicaoSimbolo || transicaoCadeiaVazia || aceitacaoCadeiaVazia) {
                     System.out.println("Transicao: " + estado.get(i).getSimbolo() + " -> " + estado.get(i).getDestino());
 
-                    if ((transicaoCadeiaVazia) && (!transicaoSimbolo)) {
+                    // Validando se a transicao que sera realizada e de cadeia vazia
+                    // Em caso positivo, o simbolo em questao nao sera lido
+
+                    if ((transicaoCadeiaVazia) && (!transicaoSimbolo) && (!aceitacaoCadeiaVazia)) {
                         indexSimbolo += 0;
                     }
                     else {
                         indexSimbolo += 1;
                     }
+
+                    // Realizando chamada recursiva
 
                     System.out.println("\n[!] Realizando chamada recursiva...\n");
                     if (recursao(cadeia, estado.get(i).getDestino(), indexSimbolo)) {
@@ -203,11 +225,14 @@ public class Automatos {
 
     /*
     Metodo responsavel por gerenciar a leitura das cadeias de teste
+    Retorna uma lista (de 0s e 1s), indicando o resultado da leitura das cadeias
      */
 
     private List<Integer> leitorDeCadeias(List<List<Integer>> cadeias) {
         printAutomato(this.afn);
-        List<Integer> resultados = new ArrayList<>();
+        List<Integer> resultados = new ArrayList<>();                   // Lista contendo os resultados da leitura das cadeias
+
+        // Gerenciamento das cadeias: Executando o automato para cada teste
 
         for (List<Integer> cadeia : cadeias) {
             System.out.println("\nIniciando Execucao...");
@@ -215,13 +240,6 @@ public class Automatos {
             boolean resultado = recursao(cadeia, 0, 0);
             resultados.add(resultado ? 1 : 0);
         }
-
-        /*
-        System.out.println("\nIniciando Execucao...");
-        System.out.println("Cadeia: " +cadeias.get(5)+ "\n");
-        boolean resultado = recursao(cadeias.get(5), 0, 0);
-        resultados.add(resultado ? 1 : 0);
-         */
 
         System.out.println("\nResultados: " +resultados);
 
@@ -234,36 +252,44 @@ public class Automatos {
 
     public void executaAFNs() {
         try {
+            // Abrindo arquivo para leitura
+
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
 
-            int numAFNs = numTestes(leitorArq);
+            int numAFNs = numTestes(leitorArq);                     // Armazenando o numero de AFNs presentes no arquivo de entrada
+
+            // Estruturando e executando os automatos
 
             while (numAFNs > 0) {
-                // Leitura do arquivo
-                List<Integer> cabecalho = infosAFN(leitorArq);
-                this.estadosDeAceitacao = infosAFN(leitorArq);
+                // Estruturando AFN
 
-                int numTransacoes = qtdTransicoes(cabecalho);
-                List<List<Integer>> transicoes = especsAFN(leitorArq, numTransacoes);
+                List<Integer> cabecalho = infosAFN(leitorArq);              // Lista armazenando o cabecalho do automato
+                this.estadosDeAceitacao = infosAFN(leitorArq);              // Lista armazenando os estados de aceitacao do automato
 
-                int numCadeias = qtdTestes(leitorArq);
-                List<List<Integer>> cadeias = especsAFN(leitorArq, numCadeias);
+                int numTransacoes = qtdTransicoes(cabecalho);                                   // Armazenando a quantidade de transicoes do automato
+                List<List<Integer>> transicoes = especsAFN(leitorArq, numTransacoes);           // Matriz representando a funcao de transicao
+
+                int numCadeias = qtdTestes(leitorArq);                                          // Armazenando a quantidade de testes que serao realizados
+                List<List<Integer>> cadeias = especsAFN(leitorArq, numCadeias);                 // Matriz contendo as cadeias de teste
 
                 System.out.println("\nCabecalho: " +cabecalho);
                 System.out.println("Estados de Aceitacao (Index): " +estadosDeAceitacao);
                 System.out.println("Transicoes: " +transicoes);
                 System.out.println("Cadeias (Testes): " +cadeias);
 
-                // Lógica da execução
-                List<List<Estado>> afn = new ArrayList<>();
+                List<List<Estado>> afn = new ArrayList<>();                 // Instanciando Lista de Adjacencia que representara o automato
 
-                int qtdEstados = cabecalho.get(0);
+                int qtdEstados = cabecalho.get(0);                          // Armazenando quantidade de estados do automato
+
+                // Armazenando, para cada estado, um lista contendo suas transicoes e respectivos destinos
 
                 for (int i = 0; i < qtdEstados; i++) {
                     List<Estado> estados = new ArrayList<>();
                     afn.add(i, estados);
                 }
+
+                // Populando as listas criadas anteriormente
 
                 for (List<Integer> transicao : transicoes) {
                     int origem = transicao.get(0);
@@ -274,15 +300,17 @@ public class Automatos {
                     afn.get(origem).add(estado);
                 }
 
-                this.afn = afn;
+                // Executando AFN
 
-                List<Integer> resultadosLeitura = leitorDeCadeias(cadeias);
-                resultados(resultadosLeitura, numAFNs);
+                this.afn = afn;                                                         // Setando o AFN como atributo do objeto
+
+                List<Integer> resultadosLeitura = leitorDeCadeias(cadeias);             // Armazenando resultados
+                resultados(resultadosLeitura, numAFNs);                                 // Adicionando resultados ao arquivo de saida
 
                 numAFNs--;
             }
 
-            arqLeitura.close();
+            arqLeitura.close();                                                         // Fechando arquivo
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -295,8 +323,12 @@ public class Automatos {
 
     public void resultados(List<Integer> resultadosLeitura, int numAFNs) {
         try {
+            // Criando ou abrindo arquivo
+
             FileWriter arqEscrita = new FileWriter(this.arqSaida, true);
             PrintWriter escritorArq = new PrintWriter(arqEscrita);
+
+            // Formatando saida
 
             String resultadoLista = resultadosLeitura.toString().replace("[", "");
             String resultadoString = resultadoLista.replace("]", "");
@@ -308,6 +340,8 @@ public class Automatos {
             else {
                 escritorArq.print(resultado);
             }
+
+            // Fechando arquivo
 
             escritorArq.close();
 
