@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
+Gabriel Bispo Abacherly - 10284420
+Gregorio Assagra de Almedia Filho - 10856824
+
 Classe responsável pela estruturação e execução de Autômatos Finitos Não Determinísticos
  */
 

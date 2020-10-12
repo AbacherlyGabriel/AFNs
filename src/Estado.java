@@ -1,8 +1,10 @@
 /*
+Gabriel Bispo Abacherly - 10284420
+Gregorio Assagra de Almedia Filho - 10856824
+
 Objeto utilizado para representar os estados e armazenar
 as informacoes de transicoes e estados de destino
  */
-
 
 public class Estado {
 
