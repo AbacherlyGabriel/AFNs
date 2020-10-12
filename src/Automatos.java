@@ -12,6 +12,9 @@ public class Automatos {
     private String arqSaida;                    // Arquivo contendo a saida das leituras realizadas pelos automatos
 
     private List<List<Estado>> afn = null;                  // Estrutura responsavel por armazenar o automato
+
+    private int estadoInicial = 0;
+
     private List<Integer> estadosDeAceitacao = null;        // Lista contendo os estados de aceitacao
 
     /*
@@ -153,17 +156,22 @@ public class Automatos {
     Para as cadeias aceitas, retorna-se true
      */
 
-    private boolean recursao(List<Integer> cadeia, int indexEstado, int indexSimbolo) {
-        List<Estado> estado = this.afn.get(indexEstado);                // Definindo estado que sera analisado
+    private boolean recursao(List<Integer> cadeia, int indexEstado, int indexSimbolo, boolean simboloLido) {
+        System.out.println("Estado: " +indexEstado);
+        System.out.println("Simbolo Lido? " +simboloLido);
 
-        if ((indexSimbolo + 1) <= cadeia.size()) {
-            System.out.println("Simbolo a ser lido: " + cadeia.get(indexSimbolo));
+        if (!simboloLido) {
+            indexSimbolo -= 1;
         }
+
+        System.out.println("Simbolo (Index): " +indexSimbolo);
+
+        List<Estado> estado = this.afn.get(indexEstado);                // Definindo estado que sera analisado
 
         // Condicao de parada: cadeia finalizada
 
         if ((indexSimbolo + 1) > cadeia.size()) {
-            System.out.println("Cadeia Finalizada...");
+            System.out.println("\nCadeia Finalizada...");
 
             List<Integer> estadosAlcancaveis = new ArrayList<>();           // Instanciando lista de alcancaveis por cadeia vazia
 
@@ -178,48 +186,64 @@ public class Automatos {
             // Checando se o estado em analise ou algum dos alcancaveis esta entre os estados de aceitacao
 
             for (int estadoDeAceitacao : this.estadosDeAceitacao) {
-                if ((estadoDeAceitacao == indexEstado) || (estadosAlcancaveis.contains(estadoDeAceitacao))) { return true; }
+                if ((estadoDeAceitacao == indexEstado) || (estadosAlcancaveis.contains(estadoDeAceitacao))) {
+                    System.out.println("[!] Cadeia Aceita");
+                    return true;
+                }
             }
         }
 
         else {
             int simbolo = cadeia.get(indexSimbolo);                 // Armazenando simbolo a ser lido
 
+            System.out.println("Simbolo a ser lido: " + simbolo);
+
+            if ((indexEstado == this.estadoInicial) && (simbolo == 0) && (this.estadosDeAceitacao.contains(this.estadoInicial))) {
+                return true;
+            }
+
             // Buscando, em cada estado, transacoes que contenham o simbolo a ser lido ou cadeias vazias
 
             for (int i = 0; i < estado.size(); i++) {
-                System.out.println("Estado: " + indexEstado);
+                //System.out.println("Estado: " + indexEstado);
 
-                boolean transicaoSimbolo = estado.get(i).getSimbolo() == simbolo;           // Validando se o simbolo foi encontrado
-                boolean transicaoCadeiaVazia = estado.get(i).getSimbolo() == 0;             // Validando se o estado em questao possui transicao de cadeia vazia
-                boolean aceitacaoCadeiaVazia = (indexEstado == 0) && (simbolo == 0);        // Validando se o estado inicial e um estado de aceitacao
+                boolean transicaoSimbolo = estado.get(i).getSimbolo() == simbolo;                                                    // Validando se o simbolo foi encontrado
+                boolean transicaoCadeiaVazia = estado.get(i).getSimbolo() == 0;                                                      // Validando se o estado em questao possui transicao de cadeia vazia
+                //boolean aceitacaoCadeiaVazia = (indexEstado == 0) && (simbolo == 0) && (this.estadosDeAceitacao.contains(0));        // Validando se o estado inicial e um estado de aceitacao
 
                 // Validando se alguma das expressoes acima e verdadeira
                 // Em caso positivo, uma chamada recursiva ao estado destino sera realizada
 
-                if (transicaoSimbolo || transicaoCadeiaVazia || aceitacaoCadeiaVazia) {
-                    System.out.println("Transicao: " + estado.get(i).getSimbolo() + " -> " + estado.get(i).getDestino());
+                if (transicaoSimbolo || transicaoCadeiaVazia) {
+                    System.out.println("Transicao: " + indexEstado + " -> " + estado.get(i).getSimbolo() + " -> " + estado.get(i).getDestino());
 
                     // Validando se a transicao que sera realizada e de cadeia vazia
                     // Em caso positivo, o simbolo em questao nao sera lido
 
+                    /*
                     if ((transicaoCadeiaVazia) && (!transicaoSimbolo) && (!aceitacaoCadeiaVazia)) {
-                        indexSimbolo += 0;
+                        indexSimbolo -= 1;
                     }
+
                     else {
                         indexSimbolo += 1;
                     }
+                     */
 
                     // Realizando chamada recursiva
 
-                    System.out.println("\n[!] Realizando chamada recursiva...\n");
-                    if (recursao(cadeia, estado.get(i).getDestino(), indexSimbolo)) {
+                    System.out.println("\nDestino: " +estado.get(i).getDestino());
+                    System.out.println("Simbolo (Index): " +indexSimbolo);
+                    System.out.println("[!] Realizando chamada recursiva...\n");
+
+                    if (recursao(cadeia, estado.get(i).getDestino(), indexSimbolo + 1, transicaoSimbolo)) {
                         return true;
                     }
                 }
             }
         }
 
+        System.out.println("Sequencia Falhou\n");
         return false;
     }
 
@@ -237,7 +261,7 @@ public class Automatos {
         for (List<Integer> cadeia : cadeias) {
             System.out.println("\nIniciando Execucao...");
             System.out.println("Cadeia: " +cadeia+ "\n");
-            boolean resultado = recursao(cadeia, 0, 0);
+            boolean resultado = recursao(cadeia, this.estadoInicial, 0, true);
             resultados.add(resultado ? 1 : 0);
         }
 
@@ -265,6 +289,7 @@ public class Automatos {
                 // Estruturando AFN
 
                 List<Integer> cabecalho = infosAFN(leitorArq);              // Lista armazenando o cabecalho do automato
+                this.estadoInicial = cabecalho.get(3);
                 this.estadosDeAceitacao = infosAFN(leitorArq);              // Lista armazenando os estados de aceitacao do automato
 
                 int numTransacoes = qtdTransicoes(cabecalho);                                   // Armazenando a quantidade de transicoes do automato
@@ -334,12 +359,17 @@ public class Automatos {
             String resultadoString = resultadoLista.replace("]", "");
             String resultado = resultadoString.replace(",", "");
 
+            escritorArq.println(resultado);
+
+            /*
             if (numAFNs > 1) {
                 escritorArq.println(resultado);
             }
             else {
                 escritorArq.print(resultado);
             }
+
+             */
 
             // Fechando arquivo
 
