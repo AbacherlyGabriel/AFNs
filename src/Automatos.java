@@ -154,6 +154,13 @@ public class Automatos {
     /*
     Leitura recursiva das cadeias de teste
     Para as cadeias aceitas, retorna-se true
+
+    Parametros:
+
+    cadeia: Lista contendo a cadeia de teste
+    indexEstado: Estado atual do automato
+    indexSimbolo: Indice atual do simbolo a ser lido
+    simboloLido: Flag indicando se o simbolo foi lido
      */
 
     private boolean recursao(List<Integer> cadeia, int indexEstado, int indexSimbolo, boolean simboloLido) {
