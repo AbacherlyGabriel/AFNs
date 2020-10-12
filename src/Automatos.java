@@ -13,7 +13,7 @@ public class Automatos {
 
     private List<List<Estado>> afn = null;                  // Estrutura responsavel por armazenar o automato
 
-    private int estadoInicial = 0;
+    private int estadoInicial = 0;                          // Estado inicial do AFN
 
     private List<Integer> estadosDeAceitacao = null;        // Lista contendo os estados de aceitacao
 
@@ -160,6 +160,9 @@ public class Automatos {
         System.out.println("Estado: " +indexEstado);
         System.out.println("Simbolo Lido? " +simboloLido);
 
+        // Validando se a transicao que sera realizada e de cadeia vazia
+        // Em caso positivo, o simbolo em questao nao sera lido
+
         if (!simboloLido) {
             indexSimbolo -= 1;
         }
@@ -217,9 +220,6 @@ public class Automatos {
                 if (transicaoSimbolo || transicaoCadeiaVazia) {
                     System.out.println("Transicao: " + indexEstado + " -> " + estado.get(i).getSimbolo() + " -> " + estado.get(i).getDestino());
 
-                    // Validando se a transicao que sera realizada e de cadeia vazia
-                    // Em caso positivo, o simbolo em questao nao sera lido
-
                     /*
                     if ((transicaoCadeiaVazia) && (!transicaoSimbolo) && (!aceitacaoCadeiaVazia)) {
                         indexSimbolo -= 1;
@@ -276,8 +276,6 @@ public class Automatos {
 
     public void executaAFNs() {
         try {
-            // Abrindo arquivo para leitura
-
             FileReader arqLeitura = new FileReader(this.arqTeste);
             BufferedReader leitorArq = new BufferedReader(arqLeitura);
 
@@ -289,7 +287,7 @@ public class Automatos {
                 // Estruturando AFN
 
                 List<Integer> cabecalho = infosAFN(leitorArq);              // Lista armazenando o cabecalho do automato
-                this.estadoInicial = cabecalho.get(3);
+                this.estadoInicial = cabecalho.get(3);                      // Setando estado inicial
                 this.estadosDeAceitacao = infosAFN(leitorArq);              // Lista armazenando os estados de aceitacao do automato
 
                 int numTransacoes = qtdTransicoes(cabecalho);                                   // Armazenando a quantidade de transicoes do automato
@@ -335,7 +333,7 @@ public class Automatos {
                 numAFNs--;
             }
 
-            arqLeitura.close();                                                         // Fechando arquivo
+            arqLeitura.close();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -348,8 +346,6 @@ public class Automatos {
 
     public void resultados(List<Integer> resultadosLeitura, int numAFNs) {
         try {
-            // Criando ou abrindo arquivo
-
             FileWriter arqEscrita = new FileWriter(this.arqSaida, true);
             PrintWriter escritorArq = new PrintWriter(arqEscrita);
 
@@ -370,8 +366,6 @@ public class Automatos {
             }
 
              */
-
-            // Fechando arquivo
 
             escritorArq.close();
 
