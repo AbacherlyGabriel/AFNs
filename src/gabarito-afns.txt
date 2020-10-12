@@ -1,0 +1,29 @@
+// AFN1
+teste: 1 1 1 1 0 0 1 0 0 0
+saida: 1 1 1 1 0 0 1 0 0 0
+entrg:
+
+// AFN2
+teste: 1 1 1 1 1 0 0 0 0 1 1 1 0
+saida: 1 1 1 1 1 0 0 0 0 1 1 1 0
+entrg:
+
+// AFN3
+teste: 0 0 1 1 0 1 1 0 0 1 1 1
+saida: 0 0 1 1 0 1 1 0 0 1 1 1
+entrg:
+
+// AFN4
+teste: 0 0 0 1 1 0 1 0 1 1 0
+saida: 0 0 0 1 1 0 1 0 1 1 0
+entrg:
+
+// AFN5
+teste: 0 0 0 0 0 1 0 0 1 1 0 0 0
+saida: 0 0 0 0 0 1 0 0 1 1 0 0 0
+entrg:
+
+// AFN6
+teste: 1 1 1 0 1 0
+saida: 1 1 1 0 1 0
+entrg:
