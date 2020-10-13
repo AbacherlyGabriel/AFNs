@@ -152,6 +152,26 @@ public class Automatos {
     }
 
     /*
+
+     */
+
+    private boolean estadosAlcancaveis(List<Estado> estado, int indexEstado) {
+        if (this.estadosDeAceitacao.contains(indexEstado)) {
+            return true;
+        }
+
+        for (int i = 0; i < estado.size(); i++) {
+            if (estado.get(i).getSimbolo() == 0) {
+                System.out.println("TRANSICAO CADEIA VAZIA PARA: " +estado.get(i).getDestino());
+                List<Estado> estadoDestino = this.afn.get(estado.get(i).getDestino());
+                return estadosAlcancaveis(estadoDestino, estado.get(i).getDestino());
+            }
+        }
+
+        return false;
+    }
+
+    /*
     Leitura recursiva das cadeias de teste
     Para as cadeias aceitas, retorna-se true
      */
@@ -176,20 +196,23 @@ public class Automatos {
         if ((indexSimbolo + 1) > cadeia.size()) {
             System.out.println("\nCadeia Finalizada...");
 
-            List<Integer> estadosAlcancaveis = new ArrayList<>();           // Instanciando lista de alcancaveis por cadeia vazia
+            //List<Integer> estadosAlcancaveis = new ArrayList<>();           // Instanciando lista de alcancaveis por cadeia vazia
 
             // Preenchendo lista com estados alcancaveis por meio de cadeia vazia
 
+            /*
             for (int i = 0; i < estado.size(); i++) {
                 if (estado.get(i).getSimbolo() == 0) {
                     estadosAlcancaveis.add(estado.get(i).getDestino());
                 }
             }
 
+             */
+
             // Checando se o estado em analise ou algum dos alcancaveis esta entre os estados de aceitacao
 
             for (int estadoDeAceitacao : this.estadosDeAceitacao) {
-                if ((estadoDeAceitacao == indexEstado) || (estadosAlcancaveis.contains(estadoDeAceitacao))) {
+                if ((estadoDeAceitacao == indexEstado) || (estadosAlcancaveis(estado, indexEstado))) {
                     System.out.println("[!] Cadeia Aceita");
                     return true;
                 }

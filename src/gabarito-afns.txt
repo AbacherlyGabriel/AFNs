@@ -1,29 +1,76 @@
 // AFN1
 teste: 1 1 1 1 0 0 1 0 0 0
 saida: 1 1 1 1 0 0 1 0 0 0
-entrg:
+saida2:
+entrega:
 
 // AFN2
 teste: 1 1 1 1 1 0 0 0 0 1 1 1 0
 saida: 1 1 1 1 1 0 0 0 0 1 1 1 0
-entrg:
+saida2:
+entrega:
 
 // AFN3
 teste: 0 0 1 1 0 1 1 0 0 1 1 1
 saida: 0 0 1 1 0 1 1 0 0 1 1 1
-entrg:
+saida2:
+entrega:
 
 // AFN4
 teste: 0 0 0 1 1 0 1 0 1 1 0
 saida: 0 0 0 1 1 0 1 0 1 1 0
-entrg:
+saida2:
+entrega:
 
 // AFN5
 teste: 0 0 0 0 0 1 0 0 1 1 0 0 0
 saida: 0 0 0 0 0 1 0 0 1 1 0 0 0
-entrg:
+saida2:
+entrega:
 
 // AFN6
 teste: 1 1 1 0 1 0
 saida: 1 1 1 0 1 0
-entrg:
+saida2:
+entrega:
+
+// AFN7
+teste: 1 1 1 1 0 0
+saida: 1 1 1 1 0 0
+saida2:
+
+// AFN8
+teste: 1 1 1 1 1 0 0 0
+saida: 1 1 1 1 1 0 0 0
+saida2:
+entrega:
+
+// AFN9
+teste: 1 0 1 1 0 0 0 1
+saida: 1 0 1 1 0 0 0 1
+saida2:
+entrega:
+
+// AFN10
+teste: 0 1 0 0 1 0 1 0
+saida: 0 1 0 0 1 0 1 0
+saida2:
+entrega:
+
+// AFN11
+teste: 0 1 0 1
+saida: 0 1 0 1
+saida2:
+entrega:
+
+// AFN12
+teste: 0 1 1 1 0 0 0
+saida: 0 1 1 1 0 0 0
+saida2:
+entrega:
+
+// AFN13
+teste: 1 1 1 1 1 0 0 0 0
+saida: 1 1 1 1 1 0 0 0 0
+saida2:
+entrega:
